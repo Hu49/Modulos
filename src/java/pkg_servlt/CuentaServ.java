@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import pkg_entidad.*;
 import pkg_persistencia.PersistenciaContabilidad;
 
@@ -28,6 +29,7 @@ public class CuentaServ extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession(false);
         PersistenciaContabilidad port = new PersistenciaContabilidad();
         String accion = request.getParameter("accion");
         String dato = port.listarCuenta();

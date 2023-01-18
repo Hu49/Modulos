@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import pkg_entidad.TipoCuenta;
 import pkg_persistencia.PersistenciaContabilidad;
 
@@ -38,6 +39,7 @@ public class TipoCuentaServ extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession(false);
         PersistenciaContabilidad port = new PersistenciaContabilidad();
         String accion = request.getParameter("accion");
         String dato = port.listarTipoCuenta();
@@ -52,8 +54,8 @@ public class TipoCuentaServ extends HttpServlet {
                     ac.setNombre(listaAc[1]);
                     datos.add(ac);
                 }
-                request.setAttribute("tipoCuenta", datos);
-                request.getRequestDispatcher("TipoCuenta.jsp?").forward(request, response);
+                session.setAttribute("tipoCuenta", datos);
+                response.sendRedirect("TipoCuenta.jsp?");
                 break;
             case "Nuevo":
                 request.getRequestDispatcher("agregarTipoCuenta.jsp").forward(request, response);
