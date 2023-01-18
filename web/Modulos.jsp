@@ -20,6 +20,10 @@
             <a href="">
                 <button class="btn btn-info btn-lg">Contabilidad</button>
             </a><br>
+            <br>
+            <form action="LoginServ" method="post">
+                <input class="btn btn-secondary" type="submit" name="accion" value="Cerrar sesion">
+            </form>
         </div>
     </body>
 </html>

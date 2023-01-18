@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import pkg_entidad.Activo;
 import pkg_persistencia.Persistencia;
 
@@ -28,6 +29,7 @@ public class ActivoServ extends HttpServlet {
     Persistencia port = new Persistencia();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
         response.setContentType("text/html;charset=UTF-8");
         String accion = request.getParameter("accion");
         String dato = port.listarActivo();
@@ -43,17 +45,17 @@ public class ActivoServ extends HttpServlet {
                     ac.setFechaAdq(listaAc[2]);
                     datos.add(ac);
                 }
-                request.setAttribute("activo", datos);
-                request.getRequestDispatcher("Activo.jsp?").forward(request, response);
+                session.setAttribute("activo", datos);
+                response.sendRedirect("Activo.jsp?");
                 break;
             case "Nuevo":
-                request.getRequestDispatcher("agregarActivo.jsp").forward(request, response);
+                response.sendRedirect("agregarActivo.jsp");
                 break;
             case "Guardar":
                 String nombrea = request.getParameter("txtnombre");
                 String fechaAdqa = request.getParameter("txtfechaAdq");
                 port.insertarActivo("0", nombrea, fechaAdqa);
-                request.getRequestDispatcher("ActivoServ?accion=Listar").forward(request, response);
+                response.sendRedirect("ActivoServ?accion=Listar");
                 break;
             case "Editar":
                 String ide = request.getParameter("id");
@@ -63,32 +65,23 @@ public class ActivoServ extends HttpServlet {
                 pe.setCodigo(infoac[0]);
                 pe.setNombre(infoac[1]);
                 pe.setFechaAdq(infoac[2]);
-                request.setAttribute("activo", pe);
-                request.getRequestDispatcher("editarActivo.jsp").forward(request, response);
+                session.setAttribute("activo", pe);
+                response.sendRedirect("editarActivo.jsp");
                 break;
             case "Actualizar":
                 String codigo1 = request.getParameter("txtcodigo");
                 String nombre1 = request.getParameter("txtnombre");
                 String fechaAdq1 = request.getParameter("txtfechaAdq");
                 port.actualizarActivo(codigo1, nombre1, fechaAdq1);
-                request.getRequestDispatcher("ActivoServ?accion=Listar").forward(request, response);
+                response.sendRedirect("ActivoServ?accion=Listar");
                 break;
             case "Eliminar":
                 String id2 = request.getParameter("id");
                 port.eliminarActivo(id2);
-                request.getRequestDispatcher("ActivoServ?accion=Listar").forward(request, response);
+                response.sendRedirect("ActivoServ?accion=Listar");
                 break;
             case "Regresar":
-                for ( String v : elemento) {
-                    Activo ac = new Activo();
-                    String[] listaAc = v.split(";");
-                    ac.setCodigo(listaAc[0]);
-                    ac.setNombre(listaAc[1]);
-                    ac.setFechaAdq(listaAc[2]);
-                    datos.add(ac);
-                }
-                request.setAttribute("activo", datos);
-                request.getRequestDispatcher("Activo.jsp").forward(request, response);
+                response.sendRedirect("ActivoServ?accion=Listar");
                 break;
             case "Mostrar":
                 String ide2 = request.getParameter("id");
@@ -98,8 +91,8 @@ public class ActivoServ extends HttpServlet {
                 pe2.setCodigo(infoac2[0]);
                 pe2.setNombre(infoac2[1]);
                 pe2.setFechaAdq(infoac2[2]);
-                request.setAttribute("activo", pe2);
-                request.getRequestDispatcher("mostrarActivo.jsp").forward(request, response);
+                session.setAttribute("activo", pe2);
+                response.sendRedirect("mostrarActivo.jsp");
                 break;
             case "Buscar":
                 String ide3 = request.getParameter("buscarActivo");
@@ -109,8 +102,8 @@ public class ActivoServ extends HttpServlet {
                 pe3.setCodigo(infoac3[0]);
                 pe3.setNombre(infoac3[1]);
                 pe3.setFechaAdq(infoac3[2]);
-                request.setAttribute("activo", pe3);
-                request.getRequestDispatcher("mostrarActivo.jsp").forward(request, response);
+                session.setAttribute("activo", pe3);
+                response.sendRedirect("mostrarActivo.jsp");
                 break;
             default:
                 throw new AssertionError();

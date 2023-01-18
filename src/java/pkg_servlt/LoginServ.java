@@ -25,6 +25,7 @@ public class LoginServ extends HttpServlet {
     Persistencia port = new Persistencia();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
         String accion = request.getParameter("accion");
         switch (accion) {
@@ -33,26 +34,27 @@ public class LoginServ extends HttpServlet {
                 String pass = request.getParameter("txtpass");
                 Boolean respuesta = port.findUser(usuario, pass);
                 if (respuesta == true){
-                    HttpSession session = request.getSession();
                     session.setAttribute("usuario", usuario);
-                    request.getRequestDispatcher("Modulos.jsp").forward(request, response);
+                    session.setAttribute("info", "");
+                    response.sendRedirect("Modulos.jsp");
                 } else {
-                    request.setAttribute("info", "Credenciales no válidas");
-                    request.getRequestDispatcher("Login.jsp").forward(request, response);
+                    session.setAttribute("info", "Credenciales no válidas");
+                    response.sendRedirect("Login.jsp");
                 }
                 break;
             case "Crear":
-                request.getRequestDispatcher("crearUsuario.jsp").forward(request, response);
+                response.sendRedirect("crearUsuario.jsp");
                 break;
             case "Guardar":
                 String usuario2 = request.getParameter("txtuser");
                 String pass2 = request.getParameter("txtpass");
                 String dato = port.crearUsuario("0",usuario2, pass2);
-                request.setAttribute("info", dato);
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                session.setAttribute("info", dato);
+                response.sendRedirect("Login.jsp");
                 break;
-            case "Regresar":
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
+            case "Cerrar sesion":
+                session.setAttribute("usuario", "");
+                response.sendRedirect("Login.jsp");
                 break;
             default:
                 throw new AssertionError();

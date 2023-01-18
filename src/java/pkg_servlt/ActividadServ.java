@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import pkg_entidad.*;
 import pkg_persistencia.Persistencia;
 /**
@@ -30,6 +31,7 @@ public class ActividadServ extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
+        HttpSession session = request.getSession(false);
         response.setContentType("text/html;charset=UTF-8");
         String accion = request.getParameter("accion");
         String dato = port.listarActividad();
@@ -44,16 +46,16 @@ public class ActividadServ extends HttpServlet {
                     ac.setNombre(listaAc[1]);
                     datos.add(ac);
                 }
-                request.setAttribute("actividad", datos);
-                request.getRequestDispatcher("Actividad.jsp").forward(request, response);
+                session.setAttribute("actividad", datos);
+                response.sendRedirect("Actividad.jsp");
                 break;
             case "Nuevo":
-                request.getRequestDispatcher("agregarActividad.jsp").forward(request, response);
+                response.sendRedirect("agregarActividad.jsp");
                 break;
             case "Guardar":
                 String nombre = request.getParameter("txtnombre");
                 port.insertarActividad("0",nombre);
-                request.getRequestDispatcher("ActividadServ?accion=Listar").forward(request, response);
+                response.sendRedirect("ActividadServ?accion=Listar");
                 break;
             case "Editar":
                 String ide = request.getParameter("id");
@@ -62,30 +64,22 @@ public class ActividadServ extends HttpServlet {
                 String[] infoac = info.split(";");
                 pe.setCodigo(infoac[0]);
                 pe.setNombre(infoac[1]);
-                request.setAttribute("actividad", pe);
-                request.getRequestDispatcher("editarActividad.jsp").forward(request, response);
+                session.setAttribute("actividad", pe);
+                response.sendRedirect("editarActividad.jsp");
                 break;
             case "Actualizar":
                 String codigo1 = request.getParameter("txtcodigo");
                 String nombre1 = request.getParameter("txtnombre");
                 port.actualizarActividad(codigo1, nombre1);
-                request.getRequestDispatcher("ActividadServ?accion=Listar").forward(request, response);
+                response.sendRedirect("ActividadServ?accion=Listar");
                 break;
             case "Eliminar":
                 String id2 = request.getParameter("id");
                 port.eliminarActividad(id2);
-                request.getRequestDispatcher("ActividadServ?accion=Listar").forward(request, response);
+                response.sendRedirect("ActividadServ?accion=Listar");
                 break;
             case "Regresar":
-                for ( String v : elemento) {
-                    Actividad ac2 = new Actividad();
-                    String[] listaAc = v.split(";");
-                    ac2.setCodigo(listaAc[0]);
-                    ac2.setNombre(listaAc[1]);
-                    datos.add(ac2);
-                }
-                request.setAttribute("actividad", datos);
-                request.getRequestDispatcher("Actividad.jsp").forward(request, response);
+                response.sendRedirect("ActividadServ?accion=Listar");
                 break;
             case "Mostrar":
                 String ide2 = request.getParameter("id");
@@ -94,8 +88,8 @@ public class ActividadServ extends HttpServlet {
                 String[] infoac2 = info2.split(";");
                 pe2.setCodigo(infoac2[0]);
                 pe2.setNombre(infoac2[1]);
-                request.setAttribute("actividad", pe2);
-                request.getRequestDispatcher("mostrarActividad.jsp").forward(request, response);
+                session.setAttribute("actividad", pe2);
+                response.sendRedirect("mostrarActividad.jsp");
                 break;   
             case "Buscar":
                 String ide3 = request.getParameter("buscarActividad");
@@ -104,8 +98,8 @@ public class ActividadServ extends HttpServlet {
                 String[] infoac3 = info3.split(";");
                 pe3.setCodigo(infoac3[0]);
                 pe3.setNombre(infoac3[1]);
-                request.setAttribute("actividad", pe3);
-                request.getRequestDispatcher("mostrarActividad.jsp").forward(request, response);
+                session.setAttribute("actividad", pe3);
+                response.sendRedirect("mostrarActividad.jsp");
                 break; 
             default:
                 throw new AssertionError();
