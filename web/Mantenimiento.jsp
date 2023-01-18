@@ -35,7 +35,7 @@
                         <c:forEach var="mantenimiento" items="${mantenimiento}">
                             <tr>
                                 <c:choose>
-                                    <c:when test="${mantenimiento.getCodigo()==codigoMantenimiento}">
+                                    <c:when test="${mantenimiento.getCodigo()==mantenimientoD[0].getCodigoMantenimiento()}">
                                         <th class="text-center">S</th>
                                     </c:when>    
                                     <c:otherwise>
