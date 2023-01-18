@@ -18,10 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pkg_entidad.*;
-import pkg_webservice.Exception_Exception;
-import pkg_webservice.WebServiceServer;
-import pkg_webservice.WebServiceServer_Service;
-
+import pkg_persistencia.Persistencia;
 /**
  *
  * @author hudie
@@ -29,11 +26,11 @@ import pkg_webservice.WebServiceServer_Service;
 @WebServlet(name = "ActividadServ", urlPatterns = {"/ActividadServ"})
 public class ActividadServ extends HttpServlet {
 
+    Persistencia port = new Persistencia();
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, Exception_Exception {
+            throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
-        WebServiceServer_Service service1 = new WebServiceServer_Service();
-        WebServiceServer port = service1.getWebServiceServerPort();
         String accion = request.getParameter("accion");
         String dato = port.listarActividad();
         String[] elemento = dato.split("/");
@@ -129,9 +126,10 @@ public class ActividadServ extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (Exception_Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ActividadServ.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     /**
@@ -145,11 +143,13 @@ public class ActividadServ extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         try {
             processRequest(request, response);
-        } catch (Exception_Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ActividadServ.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     /**

@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import pkg_webservice.WebServiceServer;
-import pkg_webservice.WebServiceServer_Service;
+import pkg_persistencia.Persistencia;
 
 /**
  *
@@ -23,26 +22,16 @@ import pkg_webservice.WebServiceServer_Service;
 @WebServlet(name = "LoginServ", urlPatterns = {"/LoginServ"})
 public class LoginServ extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    Persistencia port = new Persistencia();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        WebServiceServer_Service service1 = new WebServiceServer_Service();
-        WebServiceServer port = service1.getWebServiceServerPort();
         String accion = request.getParameter("accion");
         switch (accion) {
             case "Login":
                 String usuario = request.getParameter("txtusuario");
                 String pass = request.getParameter("txtpass");
-                Boolean respuesta = port.login(usuario, pass);
+                Boolean respuesta = port.findUser(usuario, pass);
                 if (respuesta == true){
                     HttpSession session = request.getSession();
                     session.setAttribute("usuario", usuario);

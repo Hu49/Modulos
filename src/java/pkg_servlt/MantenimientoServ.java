@@ -20,10 +20,7 @@ import pkg_entidad.Actividad;
 import pkg_entidad.Activo;
 import pkg_entidad.DetalleMantenimiento;
 import pkg_entidad.Mantenimiento;
-import pkg_webservice.Exception_Exception;
-import pkg_webservice.WebServiceServer;
-import pkg_webservice.WebServiceServer_Service;
-
+import pkg_persistencia.Persistencia;
 /**
  *
  * @author hudie
@@ -31,20 +28,11 @@ import pkg_webservice.WebServiceServer_Service;
 @WebServlet(name = "MantenimientoServ", urlPatterns = {"/MantenimientoServ"})
 public class MantenimientoServ extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    Persistencia port = new Persistencia();
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, Exception_Exception {
+            throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
-        WebServiceServer_Service service1 = new WebServiceServer_Service();
-        WebServiceServer port = service1.getWebServiceServerPort();
         String accion = request.getParameter("accion");
         String idMantenimiento = request.getParameter("codigoMantenimiento");
         String dato = port.listarMantenimiento();
@@ -337,11 +325,13 @@ public class MantenimientoServ extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         try {
             processRequest(request, response);
-        } catch (Exception_Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MantenimientoServ.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     /**
@@ -355,11 +345,13 @@ public class MantenimientoServ extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         try {
             processRequest(request, response);
-        } catch (Exception_Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MantenimientoServ.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     /**
