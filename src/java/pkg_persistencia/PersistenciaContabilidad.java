@@ -24,8 +24,8 @@ import javax.crypto.spec.SecretKeySpec;
 public class PersistenciaContabilidad {
     
     private final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private final String URL = "jdbc:mysql://localhost:3306/contabilidad?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false";
-    private final String USER = "root";
+    private final String URL = "jdbc:mysql://database-1.cnqilokvmuzu.us-east-1.rds.amazonaws.com:3306/ArquiParcial2?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false";
+    private final String USER = "admin";
     private final String PASSWORD = "empanada123";
     
     public Connection cadena;

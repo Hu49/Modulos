@@ -33,6 +33,7 @@ public class CuentaServ extends HttpServlet {
         PersistenciaContabilidad port = new PersistenciaContabilidad();
         String accion = request.getParameter("accion");
         String dato = port.listarCuenta();
+        System.out.println("dato: "+dato);
         String[] elemento = dato.split("/");
         List<Cuenta> datos = new ArrayList<Cuenta>();
         switch (accion) {
