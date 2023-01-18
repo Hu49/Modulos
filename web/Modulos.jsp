@@ -17,7 +17,7 @@
             <a href="">
                 <button class="btn btn-info btn-lg">Nómina</button>
             </a><br><br>
-            <a href="">
+            <a href="MenuContabilidad.jsp">
                 <button class="btn btn-info btn-lg">Contabilidad</button>
             </a><br>
             <br>
