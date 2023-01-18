@@ -11,7 +11,7 @@
             
             <h3>Bienvenido/a: ${usuario}</h3><br>
             <h1>Selección de módulo</h1><br>
-            <a href="Menu.jsp">
+            <a href="MenuMantenimiento.jsp">
                 <button class="btn btn-info btn-lg">Mantenimiento de activos</button>
             </a><br><br>
             <a href="">

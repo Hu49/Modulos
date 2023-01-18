@@ -57,7 +57,7 @@
         <div  class="container" style="text-align: center">
             <br>
             <button class="btn btn-warning btn-lg generate-pdf" onclick="downloadPDF()">Imprimir</button><br><br>
-            <a href="Menu.jsp">
+            <a href="MenuMantenimiento.jsp">
                 <button class="btn btn-info btn-lg">Regresar</button>
             </a>
         </div>

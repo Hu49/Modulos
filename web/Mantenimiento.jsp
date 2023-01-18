@@ -106,7 +106,7 @@
                     </tbody>
                 </table>
             </div>
-            <a href="Menu.jsp">
+            <a href="MenuMantenimiento.jsp">
                 <br><button class="btn btn-info btn-lg">Regresar</button>
             </a>
         </div>
