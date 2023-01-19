@@ -65,29 +65,55 @@ public class Persistencia {
     }
     
     // ------ Credenciales
-    public static boolean findUser (String as_user, String as_pass){
+    public static boolean findUser(String as_user, String as_pass) {
         boolean mensaje = false;
-        String sql="";
-        int r=0;
+        String sql = "";
+        int r = 0;
         Persistencia cone = new Persistencia();
-        try{
-            sql = "SELECT * FROM credenciales WHERE usuario ='"+as_user+"'";
+        try {
+            sql = "SELECT * FROM credenciales WHERE usuario ='" + as_user + "'";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){
-                r+=1;
+            while (res.next()) {
+                r += 1;
                 res.getString(1);
                 res.getString(2);
             }
-            if(r==1){
-                mensaje=true;
-            }else{
-            mensaje = false;
-        }
+            if (r == 1) {
+                mensaje = true;
+            } else {
+                mensaje = false;
+            }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return mensaje;
+    }
+    
+    public static boolean checkUser(String as_user, String as_pass) {
+        boolean mensaje = false;
+        String sql = "";
+        int r = 0;
+        Persistencia cone = new Persistencia();
+        try {
+            sql = "SELECT * FROM credenciales WHERE usuario ='" + as_user + "' and pass='" + as_pass+ "'";
+            Connection con = cone.conectar();
+            Statement cn = con.createStatement();
+            ResultSet res = cn.executeQuery(sql);
+            while (res.next()) {
+                r += 1;
+                res.getString(1);
+                res.getString(2);
+            }
+            if (r == 1) {
+                mensaje = true;
+            } else {
+                mensaje = false;
+            }
+            cn.close();
+        } catch (SQLException e) {
             System.out.println(e);
         }
         return mensaje;
