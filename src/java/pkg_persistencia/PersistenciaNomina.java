@@ -13,9 +13,9 @@ import java.sql.Statement;
  */
 public class PersistenciaNomina {
     private final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private final String URL = "jdbc:mysql://localhost:3306/arquitectura?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false";
-    private final String USER = "root";
-    private final String PASWORD = "Alfa123";
+    private final String URL = "jdbc:mysql://database-1.cnqilokvmuzu.us-east-1.rds.amazonaws.com:3306/ArquiParcial2?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false";
+    private final String USER = "admin";
+    private final String PASWORD = "empanada123";
 
     public Connection cadena;
 
