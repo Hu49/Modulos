@@ -16,7 +16,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import pkg_entidad.Actividad;
 import pkg_entidad.Activo;
 import pkg_entidad.DetalleMantenimiento;
@@ -33,7 +32,6 @@ public class MantenimientoServ extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
-        HttpSession session = request.getSession(false);
         response.setContentType("text/html;charset=UTF-8");
         String accion = request.getParameter("accion");
         String idMantenimiento = request.getParameter("codigoMantenimiento");
@@ -65,18 +63,18 @@ public class MantenimientoServ extends HttpServlet {
                     ac.setResponsable(listaAc[2]);
                     datos.add(ac);
                 }
-                session.setAttribute("mantenimiento", datos);
-                session.setAttribute("codigoMantenimiento", idMantenimiento);
-                response.sendRedirect("Mantenimiento.jsp");
+                request.setAttribute("mantenimiento", datos);
+                request.setAttribute("codigoMantenimiento", idMantenimiento);
+                request.getRequestDispatcher("Mantenimiento.jsp").forward(request, response);
                 break;
             case "Nuevo":
-                response.sendRedirect("agregarMantenimiento.jsp");
+                request.getRequestDispatcher("agregarMantenimiento.jsp").forward(request, response);
                 break;
             case "Guardar":
                 String fecha = request.getParameter("txtfecha");
                 String responsable = request.getParameter("txtresponsable");
                 port.insertarMantenimiento("0", fecha, responsable);
-                response.sendRedirect("MantenimientoServ?accion=Detalles");
+                request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Editar":
                 String ide = request.getParameter("id");
@@ -86,20 +84,20 @@ public class MantenimientoServ extends HttpServlet {
                 pe.setCodigo(infoac[0]);
                 pe.setFecha(infoac[1]);
                 pe.setResponsable(infoac[2]);
-                session.setAttribute("mantenimiento", pe);
-                response.sendRedirect("editarMantenimiento.jsp");
+                request.setAttribute("mantenimiento", pe);
+                request.getRequestDispatcher("editarMantenimiento.jsp").forward(request, response);
                 break;
             case "Actualizar":
                 String codigo1 = request.getParameter("txtcodigo");
                 String fecha1 = request.getParameter("txtfecha");
                 String responsable1 = request.getParameter("txtresponsable");
                 port.actualizarMantenimiento(codigo1, fecha1, responsable1);
-                response.sendRedirect("MantenimientoServ?accion=Detalles");
+                request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Eliminar":
                 String id2 = request.getParameter("id");
                 port.eliminarMantenimiento(id2);
-                response.sendRedirect("MantenimientoServ?accion=Detalles");
+                request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Regresar":
                 for (String v : elemento) {
@@ -121,8 +119,8 @@ public class MantenimientoServ extends HttpServlet {
                 pe2.setCodigo(infoac2[0]);
                 pe2.setFecha(infoac2[1]);
                 pe2.setResponsable(infoac2[2]);
-                session.setAttribute("mantenimiento", pe2);
-                response.sendRedirect("mostrarMantenimiento.jsp");
+                request.setAttribute("mantenimiento", pe2);
+                request.getRequestDispatcher("mostrarMantenimiento.jsp").forward(request, response);
                 break;
             case "Buscar":
                 String ide3 = request.getParameter("buscarMantenimiento");
@@ -132,8 +130,8 @@ public class MantenimientoServ extends HttpServlet {
                 pe3.setCodigo(infoac3[0]);
                 pe3.setFecha(infoac3[1]);
                 pe3.setResponsable(infoac3[2]);
-                session.setAttribute("mantenimiento", pe3);
-                response.sendRedirect("mostrarMantenimiento.jsp");
+                request.setAttribute("mantenimiento", pe3);
+                request.getRequestDispatcher("mostrarMantenimiento.jsp").forward(request, response);
                 break;
             case "Detalles":
                 if (elementoD != null) {
@@ -152,8 +150,8 @@ public class MantenimientoServ extends HttpServlet {
                         ddatos.add(man);
                     }
                 }
-                session.setAttribute("mantenimientoD", ddatos);
-                response.sendRedirect("MantenimientoServ?accion=Listar");
+                request.setAttribute("mantenimientoD", ddatos);
+                request.getRequestDispatcher("MantenimientoServ?accion=Listar").forward(request, response);
                 break;
             case "Mostrar ":
                 String ide2d = request.getParameter("id2");
@@ -169,8 +167,8 @@ public class MantenimientoServ extends HttpServlet {
                 String[] nomActvi = activi.split(";");
                 pe2d.setActividad(nomActvi[1]);
                 pe2d.setValor(Float.parseFloat(infoac2d[4]));
-                session.setAttribute("detallemantenimiento", pe2d);
-                response.sendRedirect("mostrarDetalleMantenimiento.jsp");
+                request.setAttribute("detallemantenimiento", pe2d);
+                request.getRequestDispatcher("mostrarDetalleMantenimiento.jsp").forward(request, response);
                 break;
             case "Buscar ":
                 String ide3d = request.getParameter("buscarDetalleMantenimiento");
@@ -186,8 +184,8 @@ public class MantenimientoServ extends HttpServlet {
                 String[] nomActvi2 = activi2.split(";");
                 pe3d.setActividad(nomActvi2[1]);
                 pe3d.setValor(Float.parseFloat(infoac3d[4]));
-                session.setAttribute("detallemantenimiento", pe3d);
-                response.sendRedirect("mostrarDetalleMantenimiento.jsp");
+                request.setAttribute("detallemantenimiento", pe3d);
+                request.getRequestDispatcher("mostrarDetalleMantenimiento.jsp").forward(request, response);
                 break;
             case "Nuevo ":
                 String valor = request.getParameter("id2");
@@ -211,9 +209,9 @@ public class MantenimientoServ extends HttpServlet {
                     actvidad.setNombre(listaAc[1]);
                     datosacvidad.add(actvidad);
                 }
-                session.setAttribute("SActivo", datosacvo);
-                session.setAttribute("SActividad", datosacvidad);
-                response.sendRedirect("agregarDetalleMantenimiento.jsp?codigoMantenimiento=" + valor);
+                request.setAttribute("SActivo", datosacvo);
+                request.setAttribute("SActividad", datosacvidad);
+                request.getRequestDispatcher("agregarDetalleMantenimiento.jsp?codigoMantenimiento=" + valor).forward(request, response);
                 break;
             case "Guardar ":
                 String dmantenimiento = request.getParameter("txtmantenimiento");
@@ -223,7 +221,7 @@ public class MantenimientoServ extends HttpServlet {
                 String vmanint = port.mostrarMantenimiento(dmantenimiento);
                 String[] vmaintsep = vmanint.split(";");
                 port.insertarDetalleMantenimiento("0", dmantenimiento, dactivo, dactividad, dvalor);
-                response.sendRedirect("MantenimientoServ?accion=Detalles");
+                request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Editar ":
                 String ided = request.getParameter("id2");
@@ -255,10 +253,10 @@ public class MantenimientoServ extends HttpServlet {
                 ped.setCodigoActivo(infoacd[2]);
                 ped.setCodigoActividad(infoacd[3]);
                 ped.setValor(Float.parseFloat(infoacd[4]));
-                session.setAttribute("SActivo", datosacvo2);
-                session.setAttribute("SActividad", datosacvidad2);
-                session.setAttribute("detallemantenimiento", ped);
-                response.sendRedirect("editarDetalleMantenimiento.jsp");
+                request.setAttribute("SActivo", datosacvo2);
+                request.setAttribute("SActividad", datosacvidad2);
+                request.setAttribute("detallemantenimiento", ped);
+                request.getRequestDispatcher("editarDetalleMantenimiento.jsp").forward(request, response);
                 break;
             case "Actualizar ":
                 String codigod = request.getParameter("txtcodigo");
@@ -267,12 +265,12 @@ public class MantenimientoServ extends HttpServlet {
                 String actividadd = request.getParameter("txtactividad");
                 String valord = request.getParameter("txtvalor");
                 port.actualizarDetalleMantenimiento(codigod, mantenimientod, activod, actividadd, valord);
-                response.sendRedirect("MantenimientoServ?accion=Detalles");
+                request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Eliminar ":
                 String id2d = request.getParameter("id2");
                 port.eliminarDetalleMantenimiento(id2d);
-                response.sendRedirect("MantenimientoServ?accion=Detalles");
+                request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Reporte1":
                 String valrep1 = port.reporte1Man();
@@ -309,8 +307,8 @@ public class MantenimientoServ extends HttpServlet {
                 }
                 totalrepo1.setValor(sumaActivoRepor1);
                 reporte1.add(totalrepo1);
-                session.setAttribute("reporte1", reporte1);
-                response.sendRedirect("ReporteMantenimiento1.jsp");
+                request.setAttribute("reporte1", reporte1);
+                request.getRequestDispatcher("ReporteMantenimiento1.jsp").forward(request, response);
                 break;
         }
     }

@@ -32,7 +32,7 @@ public class LoginServ extends HttpServlet {
             case "Login":
                 String usuario = request.getParameter("txtusuario");
                 String pass = request.getParameter("txtpass");
-                Boolean respuesta = port.findUser(usuario, pass);
+                Boolean respuesta = port.checkUser(usuario, pass);
                 if (respuesta == true){
                     session.setAttribute("usuario", usuario);
                     session.setAttribute("info", "");
