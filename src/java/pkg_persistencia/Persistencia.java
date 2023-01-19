@@ -511,6 +511,7 @@ public class Persistencia {
     }
     
     // --- Detalle Mantenimiento
+    
     public static String insertarDetalleMantenimiento(String as_codigo,String as_codigoManteni, String as_codigoActivo, String as_codigoActividad, String as_valor){
         String mensaje="";
         String sql = "";
@@ -669,5 +670,75 @@ public class Persistencia {
         HHZC_claveEncriptacion = Arrays.copyOf(HHZC_claveEncriptacion, 16);
         SecretKeySpec HHZC_secretKey = new SecretKeySpec(HHZC_claveEncriptacion, "AES");
         return HHZC_secretKey;
+    }
+    
+    // -------- Integración Mantenimiento
+    
+    public String crearContabilidad(String as_codigo, String as_fecha,String as_observacion)
+    {     
+        String mensaje="";
+        String sql = "";
+        Persistencia cone = new Persistencia();
+        try {
+            sql = "Insert INTO cabeceracomprobante VALUES (?,?,?)";
+            Connection con = cone.conectar();
+            PreparedStatement pst = con.prepareStatement(sql);
+            String[] parts = as_fecha.split("-");
+            as_fecha = parts[2]+"-"+parts[1]+"-"+parts[0];
+            pst.setString(1, as_codigo);
+            pst.setString(2, as_fecha);
+            pst.setString(3, as_observacion);
+            pst.execute();
+            mensaje = "Insertado con exito";
+            pst.close();
+        }catch (SQLException e)
+        {
+            mensaje = "no se pudo insetar";
+        }
+        return mensaje;
+    }
+    
+    public String obtenerContabilidad(String as_observacion){
+        String mensaje = "";
+        String sql = "";
+        Persistencia cone = new Persistencia();
+        try{
+            sql = "SELECT * FROM cabeceracomprobante WHERE cc_observaciones = 'mantenimiento: "+as_observacion+"'";
+            Connection con = cone.conectar();
+            Statement cn = con.createStatement();
+            ResultSet res = cn.executeQuery(sql);
+            while(res.next()){       
+                mensaje = res.getString(1);
+            }
+            cn.close();
+        }catch (SQLException e)
+        {
+            mensaje = "error en cabecera";
+        }
+        return mensaje;
+    }
+    
+    public String crearDetalleContabilidad(String as_codigo, String as_haber,String as_idContabilidad)
+    {     
+        String mensaje="";
+        String sql = "";
+        Persistencia cone = new Persistencia();
+        try{
+            sql = "Insert INTO detallecomprobante VALUES (?,?,?,?,?)";
+            Connection con = cone.conectar();
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, as_codigo);
+            pst.setString(2, "3");
+            pst.setString(3, as_idContabilidad);
+            pst.setString(4, "0");
+            pst.setString(5, as_haber);
+            pst.execute();
+            mensaje = "Insertado con exito";
+            pst.close();
+        }catch (SQLException e)
+        {
+            mensaje = "no se pudo insetar";
+        }
+        return mensaje;
     }
 }
