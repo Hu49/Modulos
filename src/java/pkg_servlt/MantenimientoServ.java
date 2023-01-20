@@ -74,7 +74,7 @@ public class MantenimientoServ extends HttpServlet {
                 String responsable = request.getParameter("txtresponsable");
                 port.insertarMantenimiento("0", fecha, responsable);
                 String index = port.contarCabe();
-                port.crearContabilidad("5", fecha, responsable);
+                port.crearContabilidad(index, fecha, responsable);
                 request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Editar":
@@ -224,7 +224,9 @@ public class MantenimientoServ extends HttpServlet {
                 port.insertarDetalleMantenimiento("0", dmantenimiento, dactivo, dactividad, dvalor);
                 String containt = port.obtenerContabilidad(vmaintsep[2]);
                 String index2 = port.contarDeta();
-                port.crearDetalleContabilidad(index2, dvalor, containt);
+                String index3 = Integer.toString(Integer.parseInt(port.contarDeta())+1);
+                port.crearDetalleContabilidad(index2,"1", dvalor, containt);
+                port.crearDetalleContabilidad(index3,"2", dvalor, containt);
                 request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Editar ":

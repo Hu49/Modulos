@@ -744,7 +744,7 @@ public class Persistencia {
         return mensaje;
     }
     
-    public String crearDetalleContabilidad(String as_codigo, String as_haber,String as_idContabilidad)
+    public String crearDetalleContabilidad(String as_codigo,String as_cuenta, String as_haber,String as_idContabilidad)
     {     
         String mensaje="";
         String sql = "";
@@ -754,10 +754,15 @@ public class Persistencia {
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, as_codigo);
-            pst.setString(2, "2");
+            pst.setString(2, as_cuenta);
             pst.setString(3, as_idContabilidad);
-            pst.setString(4, "0");
-            pst.setString(5, as_haber);
+            if (as_cuenta.equals("2")) {
+                pst.setString(4, "0");
+                pst.setString(5, as_haber);
+            } else {
+                pst.setString(4, as_haber);
+                pst.setString(5, "0");
+            }
             pst.execute();
             mensaje = "Insertado con exito";
             pst.close();
