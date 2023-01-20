@@ -14,7 +14,7 @@
             <a href="MenuMantenimiento.jsp">
                 <button class="btn btn-info btn-lg">Mantenimiento de activos</button>
             </a><br><br>
-            <a href="">
+            <a href="MenuNomina.jsp">
                 <button class="btn btn-info btn-lg">Nómina</button>
             </a><br><br>
             <a href="MenuContabilidad.jsp">

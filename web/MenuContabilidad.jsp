@@ -22,10 +22,10 @@
 <!--            <h2>Reportes</h2><br>
             <a href="MantenimientoServ?accion=Reporte1">
                 <button class="btn btn-warning btn-lg">Gastos por activo</button>
-            </a><br><br>
+            </a><br><br>-->
             <a href="Modulos.jsp">
                 <button class="btn btn-primary btn-lg">Regresar</button>
-            </a>-->
+            </a>
             <br><br>
         </div>
     </body>

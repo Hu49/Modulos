@@ -6,7 +6,6 @@
 package pkg_servlt;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,7 +21,7 @@ import pkg_entidad.DetalleMantenimiento;
 import pkg_entidad.Mantenimiento;
 import pkg_persistencia.Persistencia;
 /**
- *
+ *r
  * @author hudie
  */
 @WebServlet(name = "MantenimientoServ", urlPatterns = {"/MantenimientoServ"})
@@ -74,6 +73,7 @@ public class MantenimientoServ extends HttpServlet {
                 String fecha = request.getParameter("txtfecha");
                 String responsable = request.getParameter("txtresponsable");
                 port.insertarMantenimiento("0", fecha, responsable);
+                port.crearContabilidad("0", fecha, responsable);
                 request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Editar":
@@ -221,6 +221,8 @@ public class MantenimientoServ extends HttpServlet {
                 String vmanint = port.mostrarMantenimiento(dmantenimiento);
                 String[] vmaintsep = vmanint.split(";");
                 port.insertarDetalleMantenimiento("0", dmantenimiento, dactivo, dactividad, dvalor);
+                String containt = port.obtenerContabilidad(vmaintsep[2]);
+                port.crearDetalleContabilidad("0", dvalor, containt);
                 request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Editar ":

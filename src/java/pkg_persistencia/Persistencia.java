@@ -30,10 +30,10 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class Persistencia {
     
-    private final String DRIVER = "com.mysql.jdbc.Driver";
-    private final String URL = "jdbc:mysql://localhost:3306/proyectointegrador";
-    private final String USER = "root";
-    private final String PASWORD = "";
+    private final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    private final String URL = "jdbc:mysql://database-1.cnqilokvmuzu.us-east-1.rds.amazonaws.com:3306/ArquiParcial2?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false";
+    private final String USER = "admin";
+    private final String PASSWORD = "empanada123";
     private static String HHZC_clave = "clave";
     
     public Connection cadena;
@@ -46,7 +46,7 @@ public class Persistencia {
     public Connection conectar() throws SQLException {
         try {
             Class.forName(DRIVER);
-            this.cadena = DriverManager.getConnection(URL, USER, PASWORD);
+            this.cadena = DriverManager.getConnection(URL, USER, PASSWORD);
 
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
@@ -713,7 +713,7 @@ public class Persistencia {
             as_fecha = parts[2]+"-"+parts[1]+"-"+parts[0];
             pst.setString(1, as_codigo);
             pst.setString(2, as_fecha);
-            pst.setString(3, as_observacion);
+            pst.setString(3, "mantenimiento: "+as_observacion);
             pst.execute();
             mensaje = "Insertado con exito";
             pst.close();
@@ -754,7 +754,7 @@ public class Persistencia {
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, as_codigo);
-            pst.setString(2, "3");
+            pst.setString(2, "2");
             pst.setString(3, as_idContabilidad);
             pst.setString(4, "0");
             pst.setString(5, as_haber);
