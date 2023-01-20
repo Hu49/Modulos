@@ -19,7 +19,7 @@ import pkg_entidad.Actividad;
 import pkg_entidad.Activo;
 import pkg_entidad.DetalleMantenimiento;
 import pkg_entidad.Mantenimiento;
-import pkg_persistencia.Persistencia;
+import pkg_persistencia.*;
 /**
  *r
  * @author hudie
@@ -73,7 +73,8 @@ public class MantenimientoServ extends HttpServlet {
                 String fecha = request.getParameter("txtfecha");
                 String responsable = request.getParameter("txtresponsable");
                 port.insertarMantenimiento("0", fecha, responsable);
-                port.crearContabilidad("0", fecha, responsable);
+                String index = port.contarCabe();
+                port.crearContabilidad("5", fecha, responsable);
                 request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Editar":
@@ -222,7 +223,8 @@ public class MantenimientoServ extends HttpServlet {
                 String[] vmaintsep = vmanint.split(";");
                 port.insertarDetalleMantenimiento("0", dmantenimiento, dactivo, dactividad, dvalor);
                 String containt = port.obtenerContabilidad(vmaintsep[2]);
-                port.crearDetalleContabilidad("0", dvalor, containt);
+                String index2 = port.contarDeta();
+                port.crearDetalleContabilidad(index2, dvalor, containt);
                 request.getRequestDispatcher("MantenimientoServ?accion=Detalles").forward(request, response);
                 break;
             case "Editar ":

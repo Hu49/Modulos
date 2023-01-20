@@ -30,10 +30,10 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class Persistencia {
     
-    private final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private final String URL = "jdbc:mysql://database-1.cnqilokvmuzu.us-east-1.rds.amazonaws.com:3306/ArquiParcial2?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false";
-    private final String USER = "admin";
-    private final String PASSWORD = "empanada123";
+    private final String DRIVER = "com.mysql.jdbc.Driver";
+    private final String URL = "jdbc:mysql://localhost:3306/ProyectoIntegrador";
+    private final String USER = "root";
+    private final String PASSWORD = "";
     private static String HHZC_clave = "clave";
     
     public Connection cadena;
@@ -766,5 +766,44 @@ public class Persistencia {
             mensaje = "no se pudo insetar";
         }
         return mensaje;
+    }
+    
+    public String contarCabe(){
+        String numero="";
+        String sql = "";
+        Persistencia cone = new Persistencia();
+        try{
+            sql = "SELECT COUNT(CC_NUMERO) FROM cabeceracomprobante;";
+            Connection con = cone.conectar();
+            Statement cn = con.createStatement();
+            ResultSet res = cn.executeQuery(sql);
+            while(res.next()){       
+                numero = res.getString(1);
+                numero = Integer.toString(Integer.parseInt(numero)+1);
+            }
+            cn.close();
+        }catch (SQLException e)
+        {
+        }
+        return numero;
+    }
+    public String contarDeta(){
+        String numero="";
+        String sql = "";
+        Persistencia cone = new Persistencia();
+        try{
+            sql = "SELECT COUNT(DC_CODIGO) FROM detallecomprobante;";
+            Connection con = cone.conectar();
+            Statement cn = con.createStatement();
+            ResultSet res = cn.executeQuery(sql);
+            while(res.next()){       
+                numero = res.getString(1);
+                numero = Integer.toString(Integer.parseInt(numero)+1);
+            }
+            cn.close();
+        }catch (SQLException e)
+        {
+        }
+        return numero;
     }
 }
