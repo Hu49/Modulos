@@ -1,4 +1,4 @@
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1"%>
@@ -18,6 +18,12 @@
                         <input class="form-control" type="hidden" name="txtcodigo" value="${motivo.getCodigoMov()}"><br> 
                         NOMBRE:<br> 
                         <input class="form-control" type="text" name="txtnombre" value="${motivo.getNombreMov()}" required><br> 
+                        CUENTA:<br> 
+                        <select name="txtcuenta" class="form-control">
+                            <c:forEach var="SCuenta" items="${SCuenta}">
+                                <option value="${SCuenta.getCodigo()}">${SCuenta.getNombre()}</option>
+                            </c:forEach>
+                        </select><br>
                         <input class="btn btn-primary" type="submit" name="accion" value="Actualizar">
                     </form>
                     <form action="MotivoServ" method="post">

@@ -12,6 +12,7 @@ import java.sql.Statement;
  * @author josep
  */
 public class PersistenciaNomina {
+
     private final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private final String URL = "jdbc:mysql://database-1.cnqilokvmuzu.us-east-1.rds.amazonaws.com:3306/ArquiParcial2?useTimeZone=true&serverTimezone=UTC&autoReconnect=true&useSSL=false";
     private final String USER = "admin";
@@ -45,65 +46,61 @@ public class PersistenciaNomina {
     }
 
     // ------ Credenciales
-    public static boolean findUser (String as_user, String as_pass){
+    public static boolean findUser(String as_user, String as_pass) {
         boolean mensaje = false;
-        String sql="";
-        int r=0;
+        String sql = "";
+        int r = 0;
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
-            sql = "SELECT * FROM credenciales WHERE usuario ='"+as_user+"'";
+        try {
+            sql = "SELECT * FROM credenciales WHERE usuario ='" + as_user + "'";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){
-                r+=1;
+            while (res.next()) {
+                r += 1;
                 res.getString(1);
                 res.getString(2);
             }
-            if(r==1){
-                mensaje=true;
-            }else{
-            mensaje = false;
-        }
+            if (r == 1) {
+                mensaje = true;
+            } else {
+                mensaje = false;
+            }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println(e);
         }
         return mensaje;
     }
-    
-    public static String crearUsuario(String as_user, String as_pass)
-    {     
-        String mensaje="";
+
+    public static String crearUsuario(String as_user, String as_pass) {
+        String mensaje = "";
         String sql = "";
         boolean existe = false;
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             existe = findUser(as_user, as_pass);
             if (existe == false) {
                 sql = "Insert INTO credenciales VALUES (null,?,?)";
                 Connection con = cone.conectar();
                 PreparedStatement pst = con.prepareStatement(sql);
-                
+
                 pst.setString(1, as_user);
                 pst.setString(2, as_pass);
                 pst.execute();
                 mensaje = "Usuario creado con exito";
                 pst.close();
-            } else{
+            } else {
                 mensaje = "Usuario ya existe";
             }
-           
-        }catch (SQLException e)
-        {
+
+        } catch (SQLException e) {
             mensaje = "no se pudo crear el usuario";
         }
         return mensaje;
     }
-    
-    //-------------Empleado
 
+    //-------------Empleado
     public static String insertarEmpleado(String as_cedula, String as_nombre, String as_fechaIngreso, String as_sueldo) {
         String mensaje = "";
         String sql = "";
@@ -135,7 +132,7 @@ public class PersistenciaNomina {
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
             while (res.next()) {
-                mensaje += res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) +";"+ res.getString(4) + ";"+ res.getString(5) +"/";
+                mensaje += res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + ";" + res.getString(4) + ";" + res.getString(5) + "/";
             }
             cn.close();
         } catch (SQLException e) {
@@ -154,7 +151,7 @@ public class PersistenciaNomina {
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
             while (res.next()) {
-                mensaje += res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3)+ ";" + res.getString(4) + ";"+ res.getString(5)+ ";";
+                mensaje += res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + ";" + res.getString(4) + ";" + res.getString(5) + ";";
             }
             cn.close();
         } catch (SQLException e) {
@@ -213,7 +210,7 @@ public class PersistenciaNomina {
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
             while (res.next()) {
-                mensaje += res.getString(2) + ";" + res.getString(3) + ";" + res.getString(4)+ ";" + res.getString(5) + ";";
+                mensaje += res.getString(2) + ";" + res.getString(3) + ";" + res.getString(4) + ";" + res.getString(5) + ";";
             }
             cn.close();
         } catch (SQLException e) {
@@ -221,100 +218,92 @@ public class PersistenciaNomina {
         }
         return mensaje;
     }
-    
+
     //Motivo
-    public static String insertarMotivo(String as_nombre, String as_signo)
-    {     
-        String mensaje="";
+    public static String insertarMotivo(String as_nombre, String as_signo, String as_cuenta) {
+        String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
-            sql = "Insert INTO motivo VALUES (null,?,?,null)";
+        try {
+            sql = "Insert INTO motivo VALUES (null,?,?,?)";
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
             //pst.setString(1, as_codigo);
             pst.setString(1, as_nombre);
             pst.setString(2, as_signo);
+            pst.setString(3, as_cuenta);
             pst.execute();
             mensaje = "Insertado con exito";
             pst.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se pudo insertar";
         }
         return mensaje;
     }
-    
-    public static String listarMotivo()
-    {
-        String mensaje="";
+
+    public static String listarMotivo() {
+        String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "SELECT * FROM motivo";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){       
-                mensaje += res.getString(1)+";"+res.getString(2)+"/";
+            while (res.next()) {
+                mensaje += res.getString(1) + ";" + res.getString(2) + "/";
             }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se pudo listar";
         }
         return mensaje;
     }
-    
-    
-    public static String mostrarMotivo(String as_codigo)
-    {
-        String mensaje="";
+
+    public static String mostrarMotivo(String as_codigo) {
+        String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
-            sql = "SELECT * FROM motivo WHERE codigoMov='"+as_codigo+"'";
+        try {
+            sql = "SELECT * FROM motivo WHERE codigoMov='" + as_codigo + "'";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){
-                mensaje = res.getString(1)+";"+res.getString(2)+";"+res.getString(3)+";";
+            while (res.next()) {
+                mensaje = res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + ";" + res.getString(4) + ";";
             }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se encontro";
         }
         return mensaje;
     }
-      
-     public static String actualizarMotivo(String as_codigo, String as_nombre)
-    {
+
+    public static String actualizarMotivo(String as_codigo, String as_nombre, String as_cuenta) {
         String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
-            sql = "UPDATE motivo SET nombreMov = ? WHERE codigoMov = ? ";
+        try {
+            sql = "UPDATE motivo SET nombreMov = ?, ctacontable = ? WHERE codigoMov = ? ";
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, as_nombre);
-            pst.setString(2, as_codigo);
+            pst.setString(2, as_cuenta);
+            pst.setString(3, as_codigo);
             pst.execute();
             mensaje = "actualizado con exito";
             pst.close();
-        }catch (SQLException e)
-        {
-            mensaje="no se pudo actualizar";
+        } catch (SQLException e) {
+            mensaje = "no se pudo actualizar";
         }
         return mensaje;
     }
-    
-    public static String eliminarMotivo (String as_codigo)
-    {
+
+    public static String eliminarMotivo(String as_codigo) {
         String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "DELETE FROM motivo WHERE codigoMov = ? ";
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
@@ -322,41 +311,37 @@ public class PersistenciaNomina {
             pst.execute();
             mensaje = "eliminado con exito";
             pst.close();
-        }catch (SQLException e)
-        {
-            mensaje="no se pudo eliminar";
+        } catch (SQLException e) {
+            mensaje = "no se pudo eliminar";
         }
         return mensaje;
-    } 
-    
-    public static String buscarMotivo(String as_pBuscar)
-    {
-        String mensaje="";
+    }
+
+    public static String buscarMotivo(String as_pBuscar) {
+        String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
-            sql = "SELECT * FROM motivo WHERE nombreMov='"+as_pBuscar+"'";
+        try {
+            sql = "SELECT * FROM motivo WHERE nombreMov='" + as_pBuscar + "'";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){
-                mensaje = res.getString(1)+";"+res.getString(2)+";";
+            while (res.next()) {
+                mensaje = res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + ";" + res.getString(4) + ";";
             }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se encontro";
         }
         return mensaje;
     }
-    
+
     //Nomina
-    public static String insertarNominaCab(String as_fecha, String as_empleado)
-    {     
-        String mensaje="";
+    public static String insertarNominaCab(String as_fecha, String as_empleado) {
+        String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "Insert INTO nominacab VALUES (null,?,?)";
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
@@ -365,41 +350,36 @@ public class PersistenciaNomina {
             pst.execute();
             mensaje = "Insertado con exito";
             pst.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se pudo insetar";
         }
         return mensaje;
     }
-    
-     
-    public static String mostrarNominaCab(String as_codigo)
-    {
-        String mensaje="";
+
+    public static String mostrarNominaCab(String as_codigo) {
+        String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
-            sql = "SELECT * FROM nominacab WHERE codigoNmnCab='"+as_codigo+"'";
+        try {
+            sql = "SELECT * FROM nominacab WHERE codigoNmnCab='" + as_codigo + "'";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){
-                mensaje = res.getString(1)+";"+res.getString(2)+";"+res.getString(3)+";";
+            while (res.next()) {
+                mensaje = res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + ";";
             }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se encontro";
         }
         return mensaje;
     }
-      
-    public static String actualizarNominaCab(String as_codigo, String as_fecha, String as_empleado)
-    {
+
+    public static String actualizarNominaCab(String as_codigo, String as_fecha, String as_empleado) {
         String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "UPDATE nominacab SET fechaNmnCab = ?, empNmnCab = ? WHERE codigoNmnCab = ? ";
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
@@ -409,19 +389,17 @@ public class PersistenciaNomina {
             pst.execute();
             mensaje = "actualizado con exito";
             pst.close();
-        }catch (SQLException e)
-        {
-            mensaje="no se pudo actualizar";
+        } catch (SQLException e) {
+            mensaje = "no se pudo actualizar";
         }
         return mensaje;
     }
-    
-    public static String eliminarNominaCab(String as_codigo)
-    {
+
+    public static String eliminarNominaCab(String as_codigo) {
         String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "DELETE FROM nominacab WHERE codigoNmnCab = ? ";
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
@@ -429,106 +407,96 @@ public class PersistenciaNomina {
             pst.execute();
             mensaje = "eliminado con exito";
             pst.close();
-        }catch (SQLException e)
-        {
-            mensaje="no se pudo eliminar";
+        } catch (SQLException e) {
+            mensaje = "no se pudo eliminar";
         }
         return mensaje;
-    } 
-    
-    public static String listarNominaCab()
-    {
+    }
+
+    public static String listarNominaCab() {
         String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "SELECT * FROM nominacab";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){       
-                mensaje += res.getString(1)+";"+res.getString(2)+";"+res.getString(3)+";"+"/";
+            while (res.next()) {
+                mensaje += res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + ";" + "/";
             }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se pudo listar";
         }
         return mensaje;
     }
-    
-    public static String buscarNomina(String as_pBuscar)
-    {
-        String mensaje="";
+
+    public static String buscarNomina(String as_pBuscar) {
+        String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
-            sql = "SELECT * FROM nominadtl WHERE codigoNmnDet='"+as_pBuscar+"'";
+        try {
+            sql = "SELECT * FROM nominadtl WHERE codigoNmnDet='" + as_pBuscar + "'";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){
-                mensaje = res.getString(1)+";"+res.getString(2)+";";
+            while (res.next()) {
+                mensaje = res.getString(1) + ";" + res.getString(2) + ";";
             }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se encontro";
         }
         return mensaje;
     }
-    
+
     //Detalle Nomina
-    public static String insertarNominaDetalle(String as_codigoCab, String as_codigoMotivo, String as_valor){
-        String mensaje="";
+    public static String insertarNominaDetalle(String as_codigoCab, String as_codigoMotivo, String as_valor) {
+        String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "Insert INTO nominadtl VALUES (null,?,?,?)";
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, as_codigoCab);
             pst.setString(2, as_codigoMotivo);
             pst.setString(3, as_valor);
-            
+
             pst.execute();
             mensaje = "Insertado con exito";
             pst.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se pudo insetar";
         }
         return mensaje;
     }
-    
-      
-    public static String mostrarNominaDetalle(String as_codigo)
-    {
-        String mensaje="";
+
+    public static String mostrarNominaDetalle(String as_codigo) {
+        String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
-            sql = "SELECT * FROM nominadtl WHERE codigoNmnDet='"+as_codigo+"'";
+        try {
+            sql = "SELECT * FROM nominadtl WHERE codigoNmnDet='" + as_codigo + "'";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){
-                mensaje = res.getString(1)+";"+res.getString(2)+";"+res.getString(3)+";"+res.getString(4)+";";
+            while (res.next()) {
+                mensaje = res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + ";" + res.getString(4) + ";";
             }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se encontro";
         }
         return mensaje;
     }
-      
-     public static String actualizarNominaDetalle(String as_codigo, String as_codigoCab, String as_codigoMotivo, String as_valor)
-    {
+
+    public static String actualizarNominaDetalle(String as_codigo, String as_codigoCab, String as_codigoMotivo, String as_valor) {
         String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "UPDATE nominadtl SET codCabNmnDet = ?, motivoNmnDet = ?, valorNmnDet = ? WHERE codigoNmnDet = ?";
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
@@ -539,19 +507,17 @@ public class PersistenciaNomina {
             pst.execute();
             mensaje = "actualizado con exito";
             pst.close();
-        }catch (SQLException e)
-        {
-            mensaje="no se pudo actualizar";
+        } catch (SQLException e) {
+            mensaje = "no se pudo actualizar";
         }
         return mensaje;
     }
-    
-    public static String eliminarNominaDetalle(String as_codigo)
-    {
+
+    public static String eliminarNominaDetalle(String as_codigo) {
         String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "DELETE FROM nominadtl WHERE codigoNmnDet = ? ";
             Connection con = cone.conectar();
             PreparedStatement pst = con.prepareStatement(sql);
@@ -559,51 +525,99 @@ public class PersistenciaNomina {
             pst.execute();
             mensaje = "eliminado con exito";
             pst.close();
-        }catch (SQLException e)
-        {
-            mensaje="no se pudo eliminar";
+        } catch (SQLException e) {
+            mensaje = "no se pudo eliminar";
         }
         return mensaje;
-    } 
-    
-    public static String listarNominaDetalle(String as_idNomina)
-    {
+    }
+
+    public static String listarNominaDetalle(String as_idNomina) {
         String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
-            sql = "SELECT * FROM nominadtl WHERE codCabNmnDet= '"+as_idNomina+"'";
+        try {
+            sql = "SELECT * FROM nominadtl WHERE codCabNmnDet= '" + as_idNomina + "'";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){       
-                mensaje += res.getString(1)+";"+res.getString(2)+";"+res.getString(3)+";"+res.getString(4)+"/";
+            while (res.next()) {
+                mensaje += res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + ";" + res.getString(4) + "/";
             }
             cn.close();
-        }catch (SQLException e)
-        {
+        } catch (SQLException e) {
             mensaje = "no se pudo listar";
         }
         return mensaje;
     }
-    
-    public String reporte1Man()
-    {
+
+    public String reporte1Man() {
         String mensaje = "";
         String sql = "";
         PersistenciaNomina cone = new PersistenciaNomina();
-        try{
+        try {
             sql = "SELECT * FROM detalle_nomina";
             Connection con = cone.conectar();
             Statement cn = con.createStatement();
             ResultSet res = cn.executeQuery(sql);
-            while(res.next()){       
-                mensaje += res.getString(1)+";"+res.getString(2)+";"+res.getString(3)+"/";
+            while (res.next()) {
+                mensaje += res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + "/";
             }
             cn.close();
-        }catch (SQLException e)
-        {
-            mensaje = "no se pudo listar";
+        } catch (SQLException e) {
+            mensaje = "no se pudo mostrar el detalle";
+        }
+        return mensaje;
+    }
+
+    public String generarCabecera() {
+        String mensaje = "";
+        String sql = "";
+        PersistenciaNomina cone = new PersistenciaNomina();
+        try {
+            sql = "insert into cabeceracomprobante(cc_numero,cc_fecha,cc_observaciones) select numero,fecha,observacion from cabeceracomprobante_nomina";
+            Connection con = cone.conectar();
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.execute();
+            mensaje = "insertada cabecera correctamente";
+            pst.close();
+        } catch (SQLException e) {
+            mensaje = "no se pudo insertar la cabecera";
+        }
+        return mensaje;
+    }
+
+    public String generarDetalle() {
+        String mensaje = "";
+        String sql = "";
+        PersistenciaNomina cone = new PersistenciaNomina();
+        try {
+            sql = "INSERT INTO detallecomprobante(dc_codigo,c_codigo,cc_numero,dc_debe,dc_haber) SELECT (@row := @row + 1) + dc_codigo, c_codigo,cc_numero,debe,haber FROM detallecomprobante_nomina,(SELECT @row := 0) r";
+            Connection con = cone.conectar();
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.execute();
+            mensaje = "insertado detalle de manera correcta";
+            pst.close();
+        } catch (SQLException e) {
+            mensaje = "no se pudo insertar la cabecera";
+        }
+        return mensaje;
+    }
+
+    public String AsientoContable() {
+        String mensaje = "";
+        String sql = "";
+        PersistenciaNomina cone = new PersistenciaNomina();
+        try {
+            sql = "SELECT * FROM reporte_comprobante";
+            Connection con = cone.conectar();
+            Statement cn = con.createStatement();
+            ResultSet res = cn.executeQuery(sql);
+            while (res.next()) {
+                mensaje += res.getString(1) + ";" + res.getString(2) + ";" + res.getString(3) + ";" + res.getString(4) + ";" + res.getString(5) + ";" + res.getString(6) + "/";
+            }
+            cn.close();
+        } catch (SQLException e) {
+            mensaje = "no se pudo mostrar la nomina";
         }
         return mensaje;
     }

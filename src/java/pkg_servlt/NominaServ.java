@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package pkg_servelet;
+package pkg_servlt;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,9 +34,11 @@ public class NominaServ extends HttpServlet {
         String idNomina = request.getParameter("codigoNomina");
         String dato = persis.listarNominaCab();
         String datoVP = persis.reporte1Man();
+        String datoNomina = persis.AsientoContable();
         String[] elemento = dato.split("/");
         String[] elementoD = null;
         String[] elementoVP = datoVP.split("/");
+        String[] elementoNomina = datoNomina.split("/");
 
         if (idNomina == null) {
             for (String w : elemento) {
@@ -50,9 +52,12 @@ public class NominaServ extends HttpServlet {
         if (!ddato.equals("")) {
             elementoD = ddato.split("/");
         }
+        
         List<NominaCabecera> datosCab = new ArrayList<>();
         List<NominaDetalle> datosDet = new ArrayList<>();
         List<ValoresPago> datosVP = new ArrayList<>();
+        List<AsientoContableNomina> datosNomina = new ArrayList<>();
+        
         switch (accion) {
             case "Listar":
                 for (String v : elemento) {
@@ -298,6 +303,25 @@ public class NominaServ extends HttpServlet {
                 
                 request.setAttribute("reporte1", datosVP);
                 request.getRequestDispatcher("ReporteNomina1.jsp").forward(request, response);
+                break;
+            case "Asiento":
+                persis.generarCabecera();
+                persis.generarDetalle();
+                
+                for (String nom : elementoNomina) {
+                    AsientoContableNomina acn = new AsientoContableNomina();
+                    String[] listaNom = nom.split(";");
+                    acn.setNumeroComprobante(listaNom[0]);
+                    acn.setFechaComprobante(listaNom[1]);
+                    acn.setObservacionComprobante(listaNom[2]);
+                    acn.setNombreCuentaComprobante(listaNom[3]);
+                    acn.setDebeComprobante(listaNom[4]);
+                    acn.setHaberComprobante(listaNom[5]);
+                    datosNomina.add(acn);
+                }
+                
+                request.setAttribute("AsientoCont", datosNomina);
+                request.getRequestDispatcher("AsientoContableNomina.jsp").forward(request, response);
                 break;
         }
 

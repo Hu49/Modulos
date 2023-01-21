@@ -17,6 +17,7 @@
                     <input class="btn btn-success btn-lg" type="submit" name="accion" value="Nuevo">
                     <input class="btn btn-success btn-lg" type="submit" name="accion" value="Buscar">
                     <input type="text" name="buscarNominaCab">
+                    <input class="btn btn-secondary btn-lg" type="submit" name="accion" value="Asiento">
                 </form>
             </div>
             <br>
